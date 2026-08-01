@@ -64,6 +64,8 @@ Optional (for AI agents):
 
 - **`ANTHROPIC_API_KEY`** — Used by the Claude adapter. Optional; add when you want Claude-based agents.
 
+- **`GEMINI_API_KEY`** (or `GOOGLE_API_KEY`) — Used by the Gemini adapter (`gemini_local`). Optional; Google requires Gemini API keys restricted to the Gemini API.
+
 ## Networking and storage (Railway)
 
 - **HTTP proxy:** Enable a public domain for the Paperclip service and set the port to **3100**.
@@ -92,7 +94,7 @@ Paperclip is **cloned while the Docker image is built**, not at container start.
 | Where | What to do |
 |-------|------------|
 | **Railway** | Add a service variable **`PAPERCLIP_REF`** with a valid tag or branch from [paperclipai/paperclip](https://github.com/paperclipai/paperclip) (often the same value as the default `PAPERCLIP_REF` in this repo’s `Dockerfile`). Railway passes service variables into the build when the Dockerfile declares matching `ARG` lines; see [Using variables at build time](https://docs.railway.com/guides/dockerfiles#using-variables-at-build-time). |
-| **Local `docker build`** | `docker build --build-arg PAPERCLIP_REF=v2026.416.0 -t paperclip-railway-template .` |
+| **Local `docker build`** | `docker build --build-arg PAPERCLIP_REF=v2026.722.0 -t paperclip-railway-template .` |
 
 If you omit `PAPERCLIP_REF`, the default in the Dockerfile is used.
 

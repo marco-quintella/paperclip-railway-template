@@ -1,4 +1,5 @@
 import fs from "node:fs";
+import { readCurrentRef, replaceRef } from "./paperclip-ref.mjs";
 
 const owner = "paperclipai";
 const repo = "paperclip";
@@ -22,17 +23,6 @@ async function gh(path) {
     throw new Error(`GitHub API ${res.status}: ${await res.text()}`);
   }
   return res.json();
-}
-
-function readCurrentRef(dockerfile) {
-  const m = dockerfile.match(/\nARG PAPERCLIP_REF=([^\n]+)\n/);
-  return m ? m[1].trim() : null;
-}
-
-function replaceRef(dockerfile, next) {
-  const re = /\nARG PAPERCLIP_REF=([^\n]+)\n/;
-  if (!re.test(dockerfile)) throw new Error("Could not find PAPERCLIP_REF line");
-  return dockerfile.replace(re, `\nARG PAPERCLIP_REF=${next}\n`);
 }
 
 const latest = await gh(`/repos/${owner}/${repo}/releases/latest`);

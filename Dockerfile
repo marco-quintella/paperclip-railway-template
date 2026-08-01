@@ -9,7 +9,7 @@ RUN apt-get update \
 RUN corepack enable
 
 ARG PAPERCLIP_REPO=https://github.com/paperclipai/paperclip.git
-ARG PAPERCLIP_REF=v2026.416.0
+ARG PAPERCLIP_REF=v2026.722.0
 
 WORKDIR /paperclip
 RUN git clone --depth 1 --branch "${PAPERCLIP_REF}" "${PAPERCLIP_REPO}" .
@@ -24,11 +24,12 @@ FROM node:22-bookworm
 ENV NODE_ENV=production
 ENV CLAUDE_CODE_BUBBLEWRAP=1
 # Match upstream production image defaults (paperclipai/paperclip Dockerfile) so
-# agent tooling, OpenCode, and config paths behave the same in containers.
+# agent tooling, OpenCode/Gemini, and config paths behave the same in containers.
 ENV HOME=/paperclip \
     PAPERCLIP_INSTANCE_ID=default \
     PAPERCLIP_CONFIG=/paperclip/instances/default/config.json \
-    OPENCODE_ALLOW_ALL_MODELS=true
+    OPENCODE_ALLOW_ALL_MODELS=true \
+    GEMINI_SANDBOX=false
 
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
@@ -37,7 +38,9 @@ RUN apt-get update \
     git \
     jq \
     openssh-client \
+    python3 \
     ripgrep \
+    wget \
     && rm -rf /var/lib/apt/lists/*
 RUN corepack enable
 
@@ -53,7 +56,7 @@ COPY scripts/bootstrap-ceo.mjs /wrapper/template/bootstrap-ceo.mjs
 RUN chmod +x /wrapper/entrypoint.sh
 
 # Optional local adapters/tools parity with upstream Dockerfile.
-RUN npm install --global --omit=dev @anthropic-ai/claude-code@latest @openai/codex@latest opencode-ai
+RUN npm install --global --omit=dev @anthropic-ai/claude-code@latest @openai/codex@latest opencode-ai @google/gemini-cli@latest
 RUN npm install --global --omit=dev tsx
 RUN mkdir -p /paperclip \
     && chown -R node:node /app /paperclip /wrapper

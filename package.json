@@ -6,7 +6,8 @@
     "node": ">=22"
   },
   "scripts": {
-    "start": "node src/server.js"
+    "start": "node src/server.js",
+    "test": "node --test scripts/paperclip-ref.test.mjs"
   },
   "dependencies": {
     "express": "^5.1.0",

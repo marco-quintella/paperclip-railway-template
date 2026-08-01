@@ -1,5 +1,10 @@
 # Template Changelog
 
+## 2026-07-31
+
+- Changed: Paperclip pin `v2026.416.0` → `v2026.722.0` (latest stable at bump time; routine upstream uptake). **Upgrade note:** releases since v2026.416.0 add many additive DB migrations (Connections v3, MCP Tool Gateway, recovery actions, secret providers, etc.); they run automatically on startup — no manual SQL required for the Railway template’s managed Postgres. See [paperclip v2026.722.0 release notes](https://github.com/paperclipai/paperclip/releases/tag/v2026.722.0).
+- Changed: Runtime image parity with upstream production Dockerfile — install `@google/gemini-cli`, set `GEMINI_SANDBOX=false`, and add `python3` / `wget` apt packages for agent tooling.
+
 ## 2026-04-17
 
 - Fixed: WebSocket proxy upstream errors no longer crash the Node process (#6, duplicate #7) — `http-proxy` can pass a socket on WS failures, which has no `writeHead`; the wrapper now sends JSON 503 only for HTTP responses and destroys the socket otherwise.
