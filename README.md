@@ -24,9 +24,9 @@ Hosting Paperclip on Railway means running the app service beside managed Postgr
 - [Paperclip releases](https://github.com/paperclipai/paperclip/releases) — pinned version source (`PAPERCLIP_REF`)
 - [This template repository](https://github.com/marco-quintella/paperclip-railway-template) — Dockerfile, wrapper, and setup UI
 - [Railway Dockerfile build variables](https://docs.railway.com/guides/dockerfiles#using-variables-at-build-time) — override `PAPERCLIP_REF` at build time
-- Template URL: [https://railway.com/deploy/KJZc89](https://railway.com/deploy/KJZc89?referralCode=uXzB-u&utm_medium=integration&utm_source=template&utm_campaign=paperclip)
+- Template URL: [https://railway.com/deploy/paperclip-latest-version](https://railway.com/deploy/paperclip-latest-version?referralCode=2Sbs5r&utm_medium=integration&utm_source=template&utm_campaign=generic)
 
-[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/KJZc89?referralCode=uXzB-u&utm_medium=integration&utm_source=template&utm_campaign=paperclip)
+[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/paperclip-latest-version?referralCode=2Sbs5r&utm_medium=integration&utm_source=template&utm_campaign=generic)
 
 ### Implementation Details
 
