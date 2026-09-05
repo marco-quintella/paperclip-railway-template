@@ -42,7 +42,8 @@ At runtime the wrapper starts Paperclip internally, proxies `/`, and serves setu
 | Path | Purpose |
 |------|---------|
 | `/setup` | Generate the first admin invite URL |
-| `/setup/healthz` | Railway healthcheck |
+| `/setup/healthz` | Railway healthcheck (wrapper; 200 once Paperclip is up) |
+| `/api/health` | Same as `/setup/healthz` — used by the Railway template default probe |
 | `/` | Paperclip UI after onboarding |
 
 Required service defaults:
@@ -60,7 +61,7 @@ Required service defaults:
 | `PAPERCLIP_PUBLIC_URL` | `https://${{Paperclip.RAILWAY_PUBLIC_DOMAIN}}` |
 | `BETTER_AUTH_BASE_URL` | `https://${{Paperclip.RAILWAY_PUBLIC_DOMAIN}}` |
 
-Networking: public HTTP on port **3100**, healthcheck **`/setup/healthz`**, volume at **`/paperclip`**.
+Networking: public HTTP on port **3100**, healthcheck **`/setup/healthz`** or **`/api/health`**, volume at **`/paperclip`**. The wrapper answers both from a loopback probe so `PAPERCLIP_DEPLOYMENT_EXPOSURE=private` does not 403 Railway’s public healthcheck.
 
 ## Why Deploy Paperclip Latest Version on Railway?
 
@@ -78,7 +79,7 @@ By deploying Paperclip Latest Version on Railway, you are one step closer to sup
 2. In the template editor, **leave the suggested env vars as-is** (see [Required variables](#required-variables) if you need to edit them).
 3. Ensure the **Paperclip** service has:
    - **HTTP proxy** on port `3100`
-   - **Healthcheck path** `/setup/healthz`
+   - **Healthcheck path** `/setup/healthz` (or `/api/health` — both are served by the wrapper)
    - A **volume** mounted at `/paperclip` (for app data)
 4. Deploy. Once the service is live, open your app URL and go to **`/setup`**.
 

@@ -1,5 +1,9 @@
 # Template Changelog
 
+## 2026-09-05
+
+- Fixed: Railway deploys failed healthchecks with `GET /api/health 403` after Paperclip finished booting. The marketplace/service healthcheck hits the public URL; in `authenticated` + `private` mode Paperclip forbids that path when `X-Forwarded-Host` is the public domain. The wrapper now answers both `/api/health` and `/setup/healthz` from a loopback probe (503 while Paperclip is starting, 200 once it is up) so Railway can mark the replica healthy without changing deployment mode.
+
 ## 2026-07-31
 
 - Changed: Paperclip pin `v2026.416.0` → `v2026.722.0` (latest stable at bump time; routine upstream uptake). **Upgrade note:** releases since v2026.416.0 add many additive DB migrations (Connections v3, MCP Tool Gateway, recovery actions, secret providers, etc.); they run automatically on startup — no manual SQL required for the Railway template’s managed Postgres. See [paperclip v2026.722.0 release notes](https://github.com/paperclipai/paperclip/releases/tag/v2026.722.0).

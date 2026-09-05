@@ -4,6 +4,7 @@ import path from "node:path";
 import express from "express";
 import httpProxy from "http-proxy";
 import pg from "pg";
+import { railwayHealthResponse } from "./railway-health.js";
 
 const PUBLIC_PORT = Number.parseInt(process.env.PORT ?? "3100", 10);
 const INTERNAL_PORT = Number.parseInt(process.env.INTERNAL_PAPERCLIP_PORT ?? "3199", 10);
@@ -35,13 +36,33 @@ function startPaperclip() {
   });
 }
 
-async function isPaperclipReady() {
+async function fetchPaperclipHealth() {
   try {
     const res = await fetch(`${PAPERCLIP_TARGET}/api/health`);
-    return res.ok;
+    const body = await res.text();
+    return {
+      ok: res.ok,
+      status: res.status,
+      body,
+      contentType: res.headers.get("content-type") || "application/json",
+    };
   } catch {
-    return false;
+    return null;
   }
+}
+
+async function isPaperclipReady() {
+  const health = await fetchPaperclipHealth();
+  return Boolean(health?.ok);
+}
+
+function sendRailwayHealth(res, health) {
+  const mapped = railwayHealthResponse(health);
+  if (mapped.json) {
+    res.status(mapped.status).json(mapped.json);
+    return;
+  }
+  res.status(mapped.status).type(mapped.contentType).send(mapped.body);
 }
 
 const { Client } = pg;
@@ -365,8 +386,14 @@ app.get("/setup", (_req, res) => {
 });
 
 app.get("/setup/healthz", async (_req, res) => {
-  const ready = await isPaperclipReady();
-  res.status(200).json({ ok: true, wrapper: "ready", paperclipReady: ready });
+  sendRailwayHealth(res, await fetchPaperclipHealth());
+});
+
+// Railway marketplace templates probe `/api/health`. Paperclip in
+// authenticated+private mode 403s that path when the public Host is
+// forwarded, so answer from a loopback probe instead of proxying.
+app.get("/api/health", async (_req, res) => {
+  sendRailwayHealth(res, await fetchPaperclipHealth());
 });
 
 app.get("/setup/api/status", async (_req, res) => {
