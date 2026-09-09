@@ -11,7 +11,7 @@ chown -R node:node /paperclip
 # inherited Linux capabilities, which Claude Code interprets as elevated
 # privilege.
 #
-# `setpriv` (util-linux, pre-installed on Debian Bookworm) lets us
+# `setpriv` (util-linux-extra on Debian Trixie) lets us
 # explicitly clear all inherited + ambient capabilities so the child
 # process looks like a genuinely unprivileged user.
 #

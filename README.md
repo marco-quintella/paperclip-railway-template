@@ -9,7 +9,7 @@ Hosting Paperclip on Railway means running the app service beside managed Postgr
 ## Common Use Cases
 
 - Self-host an AI agent company OS with authenticated access and persistent agent state
-- Run Claude, Codex, OpenCode, or Gemini local adapters against your own Railway project
+- Run Claude, Codex, OpenCode, Gemini, or Kimi local adapters against your own Railway project
 - Bootstrap a private Paperclip instance quickly without CLI onboarding or manual invite plumbing
 
 ## Dependencies for Paperclip Latest Version Hosting
@@ -30,11 +30,11 @@ Hosting Paperclip on Railway means running the app service beside managed Postgr
 
 ### Implementation Details
 
-The image builds upstream Paperclip from a pinned ref (currently `v2026.722.0`):
+The image builds upstream Paperclip from a pinned ref (currently `v2026.831.1`):
 
 ```dockerfile
 ARG PAPERCLIP_REPO=https://github.com/paperclipai/paperclip.git
-ARG PAPERCLIP_REF=v2026.722.0
+ARG PAPERCLIP_REF=v2026.831.1
 ```
 
 At runtime the wrapper starts Paperclip internally, proxies `/`, and serves setup/health:
@@ -118,6 +118,7 @@ Optional (for AI agents):
 - **`OPENAI_API_KEY`** — Codex adapter / startup Codex login
 - **`ANTHROPIC_API_KEY`** — Claude adapter
 - **`GEMINI_API_KEY`** (or `GOOGLE_API_KEY`) — Gemini adapter (`gemini_local`); Google requires keys restricted to the Gemini API
+- **`CLAUDE_LOGIN_EDGE_TLS_TERMINATED`** — defaults to `true` in this image so in-app Claude login works behind Railway’s TLS-terminating edge. Set `false` only if you terminate TLS inside the container.
 
 ## Updating the upstream Paperclip version
 
@@ -128,7 +129,7 @@ GITHUB_TOKEN=... node scripts/bump-paperclip-ref.mjs
 Then rebuild and redeploy. To pin a different release without forking, set build-time **`PAPERCLIP_REF`** (Railway service variable or `docker build --build-arg`) to a tag from [paperclipai/paperclip](https://github.com/paperclipai/paperclip), then trigger a **new build**.
 
 ```bash
-docker build --build-arg PAPERCLIP_REF=v2026.722.0 -t paperclip-railway-template .
+docker build --build-arg PAPERCLIP_REF=v2026.831.1 -t paperclip-railway-template .
 ```
 
 ## Local test (developers)
