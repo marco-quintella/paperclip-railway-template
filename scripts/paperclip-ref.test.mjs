@@ -56,6 +56,14 @@ describe("pinned Dockerfile", () => {
   it("declares Railway TLS termination for in-app Claude login", () => {
     assert.match(dockerfile, /CLAUDE_LOGIN_EDGE_TLS_TERMINATED=true/);
   });
+
+  it("preinstalls Playwright Chromium system libraries for unprivileged agents", () => {
+    assert.match(dockerfile, /\blibnspr4\b/);
+    assert.match(dockerfile, /\blibnss3\b/);
+    assert.match(dockerfile, /\blibasound2t64\b/);
+    assert.match(dockerfile, /\blibglib2\.0-0t64\b/);
+    assert.match(dockerfile, /\bfonts-liberation\b/);
+  });
 });
 
 describe("docs stay in lockstep with the pin", () => {

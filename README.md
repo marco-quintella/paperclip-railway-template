@@ -63,6 +63,8 @@ Required service defaults:
 
 Networking: public HTTP on port **3100**, healthcheck **`/setup/healthz`** or **`/api/health`**, volume at **`/paperclip`**. The wrapper answers both from a loopback probe so `PAPERCLIP_DEPLOYMENT_EXPOSURE=private` does not 403 Railway’s public healthcheck.
 
+The runtime image also ships Playwright Chromium shared libraries (for example `libnspr4`) so agent E2E can run headless browsers without `apt-get`/`sudo`. Agents still install browser binaries in the workspace (`npx playwright install chromium`); only OS packages are baked into the image.
+
 ## Why Deploy Paperclip Latest Version on Railway?
 
 <!-- Recommended: Keep this section as shown below -->

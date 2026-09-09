@@ -2,6 +2,7 @@
 
 ## 2026-09-08
 
+- Changed: Runtime image preinstalls Playwright Chromium system libraries (Debian 13 `t64` set, including `libnspr4`) so agents can launch headless Chromium without root/`apt-get`/`sudo` at runtime.
 - Changed: Paperclip pin `v2026.722.0` → `v2026.831.1` (latest stable at bump time; routine upstream uptake). **Upgrade note:** Node.js floor is now **24.11.0** (this image moves to `node:24-trixie-slim`). Releases since v2026.722.0 add many additive DB migrations (`0184`–`0230`: Decisions, Import/Export, adapter device-login, Better Auth `issuer`, native-runner tables, etc.); they run automatically on startup — no manual SQL required for the Railway template’s managed Postgres. Only `0229` discards data (company brand color and per-company attachment size limit). See [paperclip v2026.831.1](https://github.com/paperclipai/paperclip/releases/tag/v2026.831.1) and [v2026.831.0](https://github.com/paperclipai/paperclip/releases/tag/v2026.831.0).
 - Changed: Runtime image aligned with [upstream Paperclip production Dockerfile](https://github.com/paperclipai/paperclip/blob/v2026.831.1/Dockerfile) — Node 24, `tini` as PID 1, `gh`, `@moonshot-ai/kimi-code`, and `CLAUDE_LOGIN_EDGE_TLS_TERMINATED=true` for Railway’s TLS-terminating edge. Wrapper starts Paperclip via the workspace `tsx` loader (same as upstream `CMD`).
 
